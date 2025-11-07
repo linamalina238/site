@@ -1,51 +1,170 @@
 <!DOCTYPE html>
-<html lang="ua">
+<html lang="uk">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <title>Який ти кіт? 🐾</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px;
+    }
+    .page { display: none; max-width: 600px; width: 100%; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .active { display: block; }
+    button {
+      margin-top: 15px;
+      padding: 10px 15px;
+      background-color: #ffcc66;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover { background-color: #ffb84d; }
+    label { display: block; margin: 8px 0; }
+    #result { font-size: 1.2em; font-weight: bold; text-align: center; }
+  </style>
 </head>
 <body>
-    <section class="second-page">
-    <div class="quizze">
-     <fieldset>
-        <legend id="q1-legend">2. Що для тебе ідеальний відпочинок?</legend>
 
-        <div class="option">
-          <input type="radio" id="q1-a" name="q1" value="5">
-          <label for="q1-a">a) Сховатися під ковдрою і нікуди не виходити</label>
-        </div>
-
-        <div class="option">
-          <input type="radio" id="q1-b" name="q1" value="10">
-          <label for="q1-b">b) Погуляти, пошукати пригод</label>
-        </div>
-
-        <div class="option">
-          <input type="radio" id="q1-c" name="q1" value="15">
-          <label for="q1-c">c) Полежати на сонечку, гріючи пузико</label>
-        </div>
-
-        <div class="option">
-          <input type="radio" id="q1-d" name="q1" value="20">
-          <label for="q1-d">d) Побути з друзями, аби було весело</label>
-        </div>
-
-      </fieldset>
-
-      <div class="actions">
-        
-        <span id="result" aria-live="polite"></span>
-      </div>
-    </form>
+  <!-- ГОЛОВНА -->
+  <div id="home" class="page active">
+    <h1>🐾 Вітаємо у тесті “Який ти кіт?”</h1>
+    <p>Пройди кілька запитань і дізнайся свій котячий тип!</p>
+    <button id="startQuiz">Почати тест</button>
   </div>
-<form action="file:///C:/Users/%D0%9A%D0%B0%D1%82%D0%B5%D1%80%D0%B8%D0%BD%D0%B0/site/quizze-page4.html" method="get">
-      <button type="submit">next</button>
 
-</select>
-    </div>
-    </section>
+  <!-- ТЕСТ -->
+  <div id="quiz" class="page">
+    <h2 id="questionText"></h2>
+    <form id="quizForm"></form>
+    <button id="nextBtn">Далі ➡️</button>
+  </div>
 
-    <script src = "./js/quizze res.js"></script>
+  <!-- РЕЗУЛЬТАТ -->
+  <div id="resultPage" class="page">
+    <h2>Твій результат 😺</h2>
+    <p id="result"></p>
+    <button id="restart">Повернутись на головну</button>
+  </div>
+
+  <script>
+    // -------------------------
+    // Дані запитань
+    // -------------------------
+    const questions = [
+      {
+        text: "1. Як ти зазвичай починаєш свій день?",
+        options: [
+          { text: "a) З настроєм 'не чіпайте мене, я ще сплю'", value: 3 },
+          { text: "b) З енергією — одразу біжу щось робити", value: 4 },
+          { text: "c) Повільно розтягуюсь і думаю, чи варто вставати", value: 2 },
+          { text: "d) Чекаю, поки хтось принесе їжу 😺", value: 1 }
+        ]
+      },
+      {
+        text: "2. Що ти робиш, коли маєш вільний час?",
+        options: [
+          { text: "a) Сплю де-небудь у зручному місці", value: 2 },
+          { text: "b) Граюся або шукаю пригод", value: 4 },
+          { text: "c) Їм щось смачненьке", value: 3 },
+          { text: "d) Дивлюся у вікно й думаю про життя", value: 1 }
+        ]
+      },
+      {
+        text: "3. Як ти реагуєш на гостей у домі?",
+        options: [
+          { text: "a) Тікаю під ліжко", value: 1 },
+          { text: "b) Обережно спостерігаю здалеку", value: 2 },
+          { text: "c) Одразу йду знайомитися!", value: 4 },
+          { text: "d) Залишаюся господарем ситуації — хай звикають", value: 3 }
+        ]
+      }
+    ];
+
+    // -------------------------
+    // DOM елементи
+    // -------------------------
+    const home = document.getElementById('home');
+    const quiz = document.getElementById('quiz');
+    const resultPage = document.getElementById('resultPage');
+    const questionText = document.getElementById('questionText');
+    const quizForm = document.getElementById('quizForm');
+    const nextBtn = document.getElementById('nextBtn');
+    const result = document.getElementById('result');
+    const restart = document.getElementById('restart');
+
+    // -------------------------
+    // Логіка тесту
+    // -------------------------
+    let currentQuestion = 0;
+    let totalScore = 0;
+
+    // Показати поточне запитання
+    function showQuestion() {
+      const q = questions[currentQuestion];
+      questionText.textContent = q.text;
+      quizForm.innerHTML = "";
+
+      q.options.forEach((opt, index) => {
+        const label = document.createElement('label');
+        label.innerHTML = `<input type="radio" name="answer" value="${opt.value}"> ${opt.text}`;
+        quizForm.appendChild(label);
+      });
+
+      nextBtn.textContent = currentQuestion === questions.length - 1 ? "Показати результат 🐾" : "Далі ➡️";
+    }
+
+    // Перехід між сторінками
+    function showPage(page) {
+      [home, quiz, resultPage].forEach(p => p.classList.remove('active'));
+      page.classList.add('active');
+    }
+
+    // Початок тесту
+    document.getElementById('startQuiz').addEventListener('click', () => {
+      totalScore = 0;
+      currentQuestion = 0;
+      showPage(quiz);
+      showQuestion();
+    });
+
+    // Кнопка "Далі"
+    nextBtn.addEventListener('click', () => {
+      const selected = quizForm.querySelector('input[name="answer"]:checked');
+      if (!selected) {
+        alert("Оберіть варіант відповіді 🐱");
+        return;
+      }
+
+      totalScore += parseInt(selected.value);
+
+      if (currentQuestion < questions.length - 1) {
+        currentQuestion++;
+        showQuestion();
+      } else {
+        showResult();
+      }
+    });
+
+    // Показати результат
+    function showResult() {
+      let resultText = "";
+      if (totalScore <= 4) resultText = "😴 Ти дуже спокійний і любиш спати — ти Кіт-Дрімучка!";
+      else if (totalScore <= 7) resultText = "🐈 Ти лагідний і добрий — Кіт-Домашній!";
+      else if (totalScore <= 10) resultText = "😺 Ти активний і допитливий — Кіт-Пригодник!";
+      else resultText = "🦁 Ти лідер — справжній Кіт-Король!";
+
+      result.textContent = `Твій бал: ${totalScore}. ${resultText}`;
+      showPage(resultPage);
+    }
+
+    // Повернення на головну
+    restart.addEventListener('click', () => showPage(home));
+  </script>
 </body>
 </html>
+
