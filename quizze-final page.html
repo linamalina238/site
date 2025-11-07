@@ -6,7 +6,33 @@
     <title>Document</title>
 </head>
 <body>
+  <script>
+button.addEventListener("click", () => {
+      let total = 0;
+      let answered = 0;
 
-  <script src = "./js/quizze res.js"></script>
+      questions.forEach((_, index) => {
+        const selected = document.querySelector(`input[name="q${index + 1}"]:checked`);
+        if (selected) {
+          total += parseInt(selected.value);
+          answered++;
+        }
+      });
+
+      if (answered < questions.length) {
+        result.textContent = "Будь ласка, вибери відповідь на всі питання 😸";
+        return;
+      }
+
+      // Інтерпретація результату
+      let message = "";
+      if (total <= 6) message = "Ти — ледачий кіт 💤. Любиш комфорт і спокій.";
+      else if (total <= 10) message = "Ти — спокійний мурчик 😽. Любиш баланс і затишок.";
+      else if (total <= 13) message = "Ти — допитливий кошеня 🐾. Завжди шукаєш пригод!";
+      else message = "Ти — енергійний мисливець 🐅! У тобі море сили і впевненості!";
+
+      result.textContent = `Ваш результат: ${total} балів. ${message}`;
+    });
+  </script>
 </body>
 </html>
