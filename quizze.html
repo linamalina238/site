@@ -1,21 +1,34 @@
 <!DOCTYPE html>
 <html lang="ua">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <title>Який ти кіт? 🐾</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <section class="main-page"></section>
-    <div class="wrapper"></div>
-      <h1> який ти кітік </h1>
-      <form action="quizze-page2.html" method="get">
-      <button type="submit">start quizze</button>
-      </form>
-      <img src="img/logo black.svg" alt="Logo" class="goit-logo">
-    </div>
-    </section>
 
+  <!-- ГОЛОВНА -->
+  <div id="home" class="page active">
+    <h1>🐾 Вітаємо у тесті “Який ти кіт?”</h1>
+    <p>Пройди кілька запитань і дізнайся свій котячий тип!</p>
+    <button id="startQuiz">Почати тест</button>
+  </div>
+
+  <!-- ТЕСТ -->
+  <div id="quiz" class="page">
+    <h2 id="questionText"></h2>
     <form id="quizForm"></form>
+    <button id="nextBtn">Далі ➡️</button>
+  </div>
+
+  <!-- РЕЗУЛЬТАТ -->
+  <div id="resultPage" class="page">
+    <h2>Твій результат 😺</h2>
+    <p id="result"></p>
+    <button id="restart">Повернутись на головну</button>
+  </div>
+
+  <script src="scripts.js"></script>
 </body>
 </html>
+

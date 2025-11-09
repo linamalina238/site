@@ -1,61 +1,6 @@
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-  <meta charset="UTF-8">
-  <title>Який ти кіт? 🐾</title>
-  <style>
-    body {
-      font-family: "Segoe UI", sans-serif;
-      background: #f5f5f5;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 30px;
-    }
-    .page { display: none; max-width: 600px; width: 100%; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    .active { display: block; }
-    button {
-      margin-top: 15px;
-      padding: 10px 15px;
-      background-color: #ffcc66;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    button:hover { background-color: #ffb84d; }
-    label { display: block; margin: 8px 0; }
-    #result { font-size: 1.2em; font-weight: bold; text-align: center; }
-  </style>
-</head>
-<body>
+ 'use strict';
 
-  <!-- ГОЛОВНА -->
-  <div id="home" class="page active">
-    <h1>🐾 Вітаємо у тесті “Який ти кіт?”</h1>
-    <p>Пройди кілька запитань і дізнайся свій котячий тип!</p>
-    <button id="startQuiz">Почати тест</button>
-  </div>
-
-  <!-- ТЕСТ -->
-  <div id="quiz" class="page">
-    <h2 id="questionText"></h2>
-    <form id="quizForm"></form>
-    <button id="nextBtn">Далі ➡️</button>
-  </div>
-
-  <!-- РЕЗУЛЬТАТ -->
-  <div id="resultPage" class="page">
-    <h2>Твій результат 😺</h2>
-    <p id="result"></p>
-    <button id="restart">Повернутись на головну</button>
-  </div>
-
-  <script>
-    // -------------------------
-    // Дані запитань
-    // -------------------------
-    const questions = [
+const questions = [
       {
         text: "1. Як ти зазвичай починаєш свій день?",
         options: [
@@ -81,6 +26,15 @@
           { text: "b) Обережно спостерігаю здалеку", value: 2 },
           { text: "c) Одразу йду знайомитися!", value: 4 },
           { text: "d) Залишаюся господарем ситуації — хай звикають", value: 3 }
+        ]
+      },
+       {
+        text: "4. Що ти обереш?",
+        options: [
+          { text: "a) Дивитися фільм", value: 1 },
+          { text: "b) Поїхати у подорож", value: 2 },
+          { text: "c) Піти поїсти", value: 4 },
+          { text: "d) Гуляти з друзями", value: 3 }
         ]
       }
     ];
@@ -164,7 +118,4 @@
 
     // Повернення на головну
     restart.addEventListener('click', () => showPage(home));
-  </script>
-</body>
-</html>
-
+  
